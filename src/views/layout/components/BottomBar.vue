@@ -5,6 +5,9 @@
     <transition name="fade">
       <div v-show="display" class="material-shadow" :class="barClass">
         <el-space class="item-wrapper">
+          <el-tooltip effect="dark" content="上下分屏模式" placement="top">
+            <i class="el-icon-d-caret" :class="itemClass" @click="$emit('split')"/>
+          </el-tooltip>
           <el-tooltip effect="dark" content="漫画模式" placement="top">
             <i class="el-icon-reading" :class="itemClass" @click="$emit('comic')"/>
           </el-tooltip>
@@ -39,7 +42,12 @@
           <el-tooltip effect="dark" content="删除图片" placement="top">
             <i class="el-icon-delete" :class="itemClass" @click="$emit('delete')"/>
           </el-tooltip>
-          <i class="el-icon-setting" :class="itemClass" @click="$emit('config')"/>
+          <el-tooltip effect="dark" content="开发者工具" placement="top">
+            <i class="el-icon-s-custom" :class="itemClass" @click="openDevtools()"/>
+          </el-tooltip>
+          <el-tooltip effect="dark" content="设置" placement="top">
+            <i class="el-icon-setting" :class="itemClass" @click="$emit('config')"/>
+          </el-tooltip>
         </el-space>
       </div>
     </transition>
@@ -47,6 +55,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 export default {
   name: 'BottomBar',
   props: {
@@ -67,7 +76,14 @@ export default {
   },
   data () {
     return {
-      display: false,
+      windowConfig: {
+        common: {
+          interface: {
+            enableAutoHideBottomToolBar: false, // 自动隐藏底部工具栏
+          },
+        }
+      },
+      display: true,
       timer: null
     }
   },
@@ -88,6 +104,12 @@ export default {
   methods: {
     showToolBar (bool) {
       clearTimeout(this.timer)
+      if (!this.windowConfig.common.interface.enableAutoHideBottomToolBar) {
+        if (!this.display) {
+          this.display = true
+        }
+        return
+      }
       if (bool) {
         this.display = true
       } else {
@@ -96,7 +118,27 @@ export default {
           that.display = false
         }, 1200)
       }
-    }
+    },
+    refreshConfig () {
+      this.windowConfig = ipcRenderer.sendSync('setting', { event: 'load' })
+
+      this.showToolBar()
+    },
+    openDevtools () {
+      ipcRenderer.send('openDevtools')
+    },
+  },
+  mounted () {
+    // 初始化
+    this.refreshConfig()
+    // 监听
+    ipcRenderer.on('viewer', (e, msg) => {
+      switch (msg.event) {
+        case 'reloadConfig':
+          this.refreshConfig()
+          break
+      }
+    })
   }
 }
 </script>

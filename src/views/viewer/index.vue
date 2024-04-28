@@ -133,15 +133,16 @@ export default {
       this.display.init()
     },
     onWheel (event, mouse) {
-      if (this.listener.getKeyCtrl()) {
         this.display.scale(event.deltaY > 0 ? -0.1 : 0.1, mouse)
-      } else {
-        if (this.temp.attr.longV) {
-          this.display.skim(event.deltaY, true)
-        } else {
-          this.temp = this.display.turn(event.deltaY > 0)
-        }
-      }
+      // if (this.listener.getKeyCtrl()) {
+      // } else {
+        // console.info('[viewer]滚轮缩放')
+        // if (this.temp.attr.longV) {
+        //   this.display.skim(event.deltaY, true)
+        // } else {
+        //   this.temp = this.display.turn(event.deltaY > 0)
+        // }
+      // }
     },
     onMouseDown (event) {
       switch (event.button) {

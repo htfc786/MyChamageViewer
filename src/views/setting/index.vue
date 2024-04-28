@@ -1,7 +1,7 @@
 <template>
   <div class="setting-wrapper">
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :span="10">
         <SettingCard
           :title="'文件夹穿透'"
           :status="config.function.penetrate"
@@ -10,7 +10,7 @@
             saveChange()
           }"/>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="10">
         <SettingCard
           :title="'拖拽阻尼效果'"
           :status="config.common.animation.move"
@@ -22,7 +22,7 @@
     </el-row>
 
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :span="10">
         <SettingCard
           :title="'启用换页按钮'"
           :status="config.common.interface.enableChangePageBtn"
@@ -31,7 +31,7 @@
             saveChange()
           }"/>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="10">
         <SettingCard
           :title="'启用缩放提示'"
           :status="config.common.interface.enableScaleInfo"
@@ -40,17 +40,28 @@
             saveChange()
           }"/>
       </el-col>
-<!--      <el-col :span="6">-->
-<!--        <SettingCard-->
-<!--          :title="'启用底部按钮'"-->
-<!--          :status="config.common.interface.enableBottomToolBar"-->
-<!--          @change="function (v) {-->
-<!--            config.common.interface.enableBottomToolBar = v-->
-<!--            saveChange()-->
-<!--          }"/>-->
-<!--      </el-col>-->
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="10">
+        <SettingCard
+          :title="'自动隐藏底部工具栏'"
+          :status="config.common.interface.enableAutoHideBottomToolBar"
+          @change="function (v) {
+            config.common.interface.enableAutoHideBottomToolBar = v
+            saveChange()
+          }"/>
+      </el-col>
     </el-row>
   </div>
+  <!-- <el-col :span="6">
+    <SettingCard
+      :title="'启用底部按钮'"
+      :status="config.common.interface.enableBottomToolBar"
+      @change="function (v) {
+        config.common.interface.enableBottomToolBar = v
+        saveChange()
+      }"/>
+  </el-col> -->
 </template>
 
 <script>
@@ -69,7 +80,8 @@ export default {
           interface: {
             enableChangePageBtn: true,
             enableScaleInfo: true,
-            enableBottomToolBar: true
+            enableBottomToolBar: true,
+            enableAutoHideBottomToolBar: false, // 自动隐藏底部工具栏
           },
           animation: {
             move: true
@@ -96,5 +108,11 @@ export default {
 .setting-wrapper {
   width: 100%;
   padding: 20px;
+}
+.setting-wrapper .el-row {
+  margin-bottom: 8px;
+}
+.setting-wrapper .el-row:last-child {
+  margin-bottom: 0;
 }
 </style>

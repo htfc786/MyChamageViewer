@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { Listener } from '@/components/window/module/listener'
 
@@ -36,6 +36,10 @@ export class Window {
 
     this.mainWindow.once('ready-to-show', () => {
       this.mainWindow.show()
+    })
+
+    ipcMain.on('openDevtools', (event, arg) => {
+      this.mainWindow.webContents.openDevTools();
     })
   }
 
